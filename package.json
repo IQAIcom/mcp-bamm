@@ -1,6 +1,6 @@
 {
 	"name": "@iqai/mcp-bamm",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "MCP server for bamm (borrow automated market maker)",
 	"main": "dist/index.js",
 	"type": "module",
