@@ -1,10 +1,10 @@
+import dedent from "dedent";
+import type { Tool } from "fastmcp";
+import type { Address } from "viem";
 import { z } from "zod";
+import formatNumber from "../lib/format-number.js";
 import { AddCollateralService } from "../services/add-collateral.js";
 import { WalletService } from "../services/wallet.js";
-import dedent from "dedent";
-import formatNumber from "../lib/format-number.js";
-import type { Address } from "viem";
-import type { Tool } from "fastmcp";
 
 const addCollateralToolParams = z.object({
 	bammAddress: z

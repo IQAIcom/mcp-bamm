@@ -1,10 +1,10 @@
+import dedent from "dedent";
+import type { Tool } from "fastmcp";
+import type { Address } from "viem";
 import { z } from "zod";
+import formatNumber from "../lib/format-number.js";
 import { LendService } from "../services/lend.js";
 import { WalletService } from "../services/wallet.js";
-import dedent from "dedent";
-import formatNumber from "../lib/format-number.js";
-import type { Address } from "viem";
-import type { Tool } from "fastmcp";
 
 const lendToolParams = z.object({
 	bammAddress: z
