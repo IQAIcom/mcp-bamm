@@ -8,6 +8,10 @@ export async function ensureTokenApproval(
 	publicClient: PublicClient,
 	walletClient: WalletClient,
 ) {
+	if (!walletClient.account) {
+		throw new Error("Wallet account is not set");
+	}
+
 	const userAddress = walletClient.account.address;
 	const currentAllowance: bigint = await publicClient.readContract({
 		address: tokenAddress,

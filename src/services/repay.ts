@@ -1,5 +1,3 @@
-import { elizaLogger } from "@elizaos/core";
-import { erc20Abi } from "viem";
 import type { Address } from "viem";
 import { BAMM_ABI } from "../lib/bamm.abi.js";
 import { getTokenAddressFromSymbol } from "../lib/symbol-to-address.js";
@@ -100,7 +98,7 @@ export class RepayService {
 			await publicClient.waitForTransactionReceipt({ hash: txHash });
 			return { txHash };
 		} catch (error) {
-			elizaLogger.error("Error repaying:", error);
+			console.error("Error repaying:", error);
 			throw error;
 		}
 	}

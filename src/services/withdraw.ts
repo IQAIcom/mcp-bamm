@@ -1,4 +1,3 @@
-import { elizaLogger } from "@elizaos/core";
 import type { Address } from "viem";
 import { BAMM_ABI } from "../lib/bamm.abi.js";
 import { checkTokenBalance, ensureTokenApproval } from "../lib/token-utils.js";
@@ -66,7 +65,7 @@ export class WithdrawService {
 
 			return { txHash };
 		} catch (error) {
-			elizaLogger.error("Error in withdraw service:", error);
+			console.error("Error in withdraw service:", error);
 			throw error;
 		}
 	}

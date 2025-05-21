@@ -1,4 +1,3 @@
-import { elizaLogger } from "@elizaos/core";
 import { erc20Abi } from "viem";
 import type { Address } from "viem";
 import { BAMM_ABI } from "../lib/bamm.abi.js";
@@ -112,7 +111,7 @@ export class BorrowService {
 
 			return { txHash };
 		} catch (error) {
-			elizaLogger.error("Error in borrow service", error);
+			console.error("Error in borrow service", error);
 			throw error;
 		}
 	}

@@ -1,4 +1,3 @@
-import { elizaLogger } from "@elizaos/core";
 import type { Address } from "viem";
 import { BAMM_ABI } from "../lib/bamm.abi.js";
 import { getTokenAddressFromSymbol } from "../lib/symbol-to-address.js";
@@ -92,7 +91,7 @@ export class AddCollateralService {
 			await publicClient.waitForTransactionReceipt({ hash: txHash });
 			return { txHash };
 		} catch (error) {
-			elizaLogger.error("Error in add collateral service:", error);
+			console.error("Error in add collateral service:", error);
 			throw Error("Error in add collateral service");
 		}
 	}
