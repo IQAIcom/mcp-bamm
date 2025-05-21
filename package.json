@@ -27,6 +27,9 @@
 	"bugs": {
 		"url": "https://github.com/IQAIcom/mcp-bamm/issues"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"keywords": ["mcp", "bamm", "borrow", "automated market maker"],
 	"dependencies": {
 		"dedent": "^1.6.0",
