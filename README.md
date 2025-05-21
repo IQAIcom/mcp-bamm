@@ -128,10 +128,10 @@ This template includes `husky` and `lint-staged` in its `devDependencies` for ru
 
    ```bash
    # Create or edit the pre-commit file
-   echo "#!/usr/bin/env sh
-   . \"\$(dirname -- \"\$0\")/_/husky.sh\"
+   echo '#!/usr/bin/env sh' > .husky/pre-commit
+   echo '. "$(dirname -- "$0")/_/husky.sh"
    
-   pnpm lint-staged" > .husky/pre-commit
+   pnpm lint-staged' >> .husky/pre-commit
    
    # Make it executable
    chmod +x .husky/pre-commit
