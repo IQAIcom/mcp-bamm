@@ -1,212 +1,174 @@
-# MCP Server Starter Template
+# MCP-BAMM: Model Context Protocol Server for Borrow Automated Market Maker
 
-A minimal starter template for building Model Context Protocol (MCP) servers using TypeScript and FastMCP.
+This project implements a Model Context Protocol (MCP) server to interact with Borrow Automated Market Maker (BAMM) contracts on the Fraxtal blockchain. It allows MCP-compatible clients (like AI assistants, IDE extensions, or custom applications) to manage BAMM positions, borrow against LP tokens, and perform other operations related to the BAMM protocol.
 
-## Features
+This server is built using TypeScript and `fastmcp`.
 
-* Basic project structure with `src/lib`, `src/services`, `src/tools`.
-* TypeScript setup (compiles to `dist/`).
-* Biome for linting and formatting.
-* `fastmcp` for MCP server implementation.
-* A weather service example demonstrating:
-  * Proper folder structure (lib, services, tools)
-  * API integration with error handling
-  * Parameter validation using Zod
-  * Separation of concerns
-* GitHub Actions workflows for CI and Release (manual trigger by default).
+## Features (MCP Tools)
 
-## Getting Started
+The server exposes the following tools that MCP clients can utilize:
 
-1. **Create a new repository from this template:**
-   Click [here](https://github.com/new?template_name=mcp-server-starter&template_owner=IQAIcom) to generate a new repository from this template.
+* **`ADD_COLLATERAL`**: Add collateral to your BAMM position.
+  * Parameters: `bammAddress` (string), `amount` (string), `collateralToken` (string, optional), `collateralTokenSymbol` (string, optional)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-2. **Navigate to your new project:**
+* **`BORROW`**: Borrow tokens from a BAMM position.
+  * Parameters: `bammAddress` (string), `amount` (string), `borrowToken` (string, optional), `borrowTokenSymbol` (string, optional)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-    ```bash
-    cd /path/to/your-new-mcp-server
-    ```
+* **`REPAY`**: Repay borrowed tokens to a BAMM position.
+  * Parameters: `bammAddress` (string), `amount` (string), `borrowToken` (string, optional), `borrowTokenSymbol` (string, optional)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-3. **Initialize Git Repository (if not already):**
+* **`LEND`**: Lend Fraxswap LP tokens to a BAMM contract.
+  * Parameters: `bammAddress` (string), `amount` (string)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-    ```bash
-    git init
-    git branch -M main # Or your preferred default branch name
-    ```
+* **`WITHDRAW`**: Withdraw LP tokens from a BAMM contract by redeeming BAMM tokens.
+  * Parameters: `bammAddress` (string), `amount` (string)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-4. **Customize `package.json`:**
-    * Update `name`, `version`, `description`, `author`, `repository`, etc.
-    * Update the `bin` entry if you change the command name.
+* **`REMOVE_COLLATERAL`**: Remove collateral from your BAMM position.
+  * Parameters: `bammAddress` (string), `amount` (string), `collateralToken` (string, optional), `collateralTokenSymbol` (string, optional)
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-5. **Install dependencies:**
+* **`GET_POSITIONS`**: Get all your active BAMM positions.
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-    ```bash
-    pnpm install
-    ```
+* **`POOL_STATS`**: Get statistics for all BAMM pools.
+  * Requires `WALLET_PRIVATE_KEY` in the environment.
 
-6. **Configure environment variables:**
-   For the weather service example, you'll need an OpenWeather API key:
+## Prerequisites
 
-   ```bash
-   # Create a .env file (add to .gitignore)
-   echo "OPENWEATHER_API_KEY=your_api_key_here" > .env
-   ```
+* Node.js (v18 or newer recommended)
+* pnpm
 
-   Get an API key from [OpenWeather](https://openweathermap.org/api).
+## Installation
 
-7. **Initial Commit:**
-    It's a good idea to make an initial commit at this stage before setting up Husky and Changesets.
+There are a few ways to use `mcp-bamm`:
 
-    ```bash
-    git add .
-    git commit -m "feat: initial project setup from template"
-    ```
+**1. Using `pnpm dlx` (Recommended for most MCP client setups):**
 
-8. **Develop your server:**
-    * Add your custom tools in the `src/tools/` directory.
-    * Implement logic in `src/lib/` and `src/services/`.
-    * Register tools in `src/index.ts`.
+You can run the server directly using `pnpm dlx` without needing a global installation. This is often the easiest way to integrate with MCP clients.
 
-## Example Weather Tool
+**2. Global Installation from npm (via pnpm):**
 
-This template includes a weather service example that demonstrates:
-
-1. **HTTP Utilities** (`src/lib/http.ts`):
-   * Type-safe HTTP requests with Zod validation
-   * Error handling
-
-2. **Configuration** (`src/lib/config.ts`):
-   * Environment variable management
-   * Service configuration
-
-3. **Weather Service** (`src/services/weatherService.ts`):
-   * API integration
-   * Data transformation
-   * Proper error propagation
-
-4. **Weather Tool** (`src/tools/weather.ts`):
-   * Parameter validation with Zod
-   * User-friendly output formatting
-   * Error handling and user guidance
-
-To use the weather tool:
+Install the package globally to make the `mcp-bamm` command available system-wide:
 
 ```bash
-# Set your OpenWeather API key
-export OPENWEATHER_API_KEY=your_api_key_here
-
-# Run the server
-pnpm run start
-
-# Connect with an MCP client and use the GET_WEATHER tool
-# with parameter: { "city": "London" }
+pnpm add -g mcp-bamm
 ```
 
-## Pre-commit Linting (Husky & lint-staged)
+**3. Building from Source (for development or custom modifications):**
 
-This template includes `husky` and `lint-staged` in its `devDependencies` for running Biome on staged files before committing. To set it up:
+1. **Clone the repository:**
 
-1. **Ensure your package.json has the prepare script for husky:**
-
-   ```json
-   {
-     "scripts": {
-       "prepare": "husky"
-     }
-   }
+   ```bash
+   git clone https://github.com/your-org/mcp-bamm.git
+   cd mcp-bamm
    ```
 
-2. **Install dependencies and initialize husky:**
+2. **Install dependencies:**
 
    ```bash
    pnpm install
-   pnpm dlx husky init
    ```
 
-   This creates a `.husky` directory with the necessary setup.
+3. **Set up your wallet private key:**
 
-3. **Create the pre-commit hook for lint-staged:**
+   Set the `WALLET_PRIVATE_KEY` environment variable with your wallet's private key (without 0x prefix):
 
    ```bash
-   # Create or edit the pre-commit file
-   echo '#!/usr/bin/env sh' > .husky/pre-commit
-   echo '. "$(dirname -- "$0")/_/husky.sh"
-   
-   pnpm lint-staged' >> .husky/pre-commit
-   
-   # Make it executable
-   chmod +x .husky/pre-commit
-
+   export WALLET_PRIVATE_KEY=your_private_key_here
    ```
 
-4. **Configure `lint-staged` in `package.json`:**
-   ```json
-   // In package.json
-   "lint-staged": {
-     "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc}": [
-       "biome check --write --organize-imports-enabled=false --no-errors-on-unmatched"
-     ]
-   }
+   For persistent configuration, add this to your shell profile or use a `.env` file (make sure to add the `.env` file to `.gitignore`).
+
+4. **Build the project:**
+
+   ```bash
+   pnpm run build
    ```
 
-   *Adjust the Biome command as needed. The one above is a common example.*
+5. **Start the server:**
 
-5. **Test it:**
-   Stage some changes to a `.ts` file and try to commit. Biome should run on the staged file.
+   ```bash
+   pnpm run start
+   ```
 
-## Release Management (Changesets)
+## Configuration (Environment Variables)
 
-This template is ready for release management using [Changesets](https://github.com/changesets/changesets).
+This MCP server requires certain environment variables to be set by the MCP client that runs it. These are typically configured in the client's MCP server definition (e.g., in a `mcp.json` file for Cursor, or similar for other clients).
 
-1. **Install Changesets CLI (if not already in devDependencies):**
-    The template `package.json` should include `@changesets/cli`. If not:
+* **`WALLET_PRIVATE_KEY`**: (Required for all blockchain operations)
+  * The private key of the wallet to be used for interacting with BAMM contracts (signing transactions for lending, borrowing, etc.).
+  * **Security Note:** Handle this private key with extreme care. Ensure it is stored securely and only provided to trusted MCP client configurations.
 
-    ```bash
-    pnpm add -D @changesets/cli
-    ```
+## Running the Server with an MCP Client
 
-2. **Initialize Changesets:**
-    This command will create a `.changeset` directory with some configuration files.
+MCP clients (like AI assistants, IDE extensions, etc.) will run this server as a background process. You need to configure the client to tell it how to start your server. Below is an example configuration snippet that an MCP client might use (e.g., in a `mcp_servers.json` or similar configuration file). This example shows how to run the server using the published npm package via `pnpm dlx`.
 
-    ```bash
-    pnpm changeset init
-    # or npx changeset init
-    ```
+```json
+{
+  "mcpServers": {
+    "bamm-mcp-server": {
+      "command": "pnpm",
+      "args": ["dlx", "mcp-bamm"],
+      "env": {
+        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
+      }
+    }
+  }
+}
+```
 
-    Commit the generated `.changeset` directory and its contents.
+**Alternative if Globally Installed:**
+If you have installed `mcp-bamm` globally (`pnpm add -g mcp-bamm`), you can simplify the `command` and `args`:
 
-3. **Adding Changesets During Development:**
-    When you make a change that should result in a version bump (fix, feature, breaking change):
+```json
+{
+  "mcpServers": {
+    "bamm-mcp-server": {
+      "command": "mcp-bamm",
+      "args": [],
+      "env": {
+        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
+      }
+    }
+  }
+}
+```
 
-    ```bash
-    pnpm changeset add
-    # or npx changeset add
-    ```
+* **`command`**: The executable to run.
+  * For `pnpm dlx`: `"pnpm"` (with `"dlx"` as the first arg)
+  * For global install: `"mcp-bamm"`
+* **`args`**: An array of arguments to pass to the command.
+  * For `pnpm dlx`: `["dlx", "mcp-bamm"]`
+  * For global install: `[]`
+* **`env`**: An object containing environment variables to be set when the server process starts. This is where you provide `WALLET_PRIVATE_KEY`.
 
-    Follow the prompts. This will create a markdown file in the `.changeset` directory describing the change.
-    Commit this changeset file along with your code changes.
+## Example Usage
 
-4. **Publishing a Release:**
-    The GitHub Actions workflow `release.yml` (in `mcp-server-starter/.github/workflows/`) is set up for this. When you are ready to release:
-    * Ensure all feature PRs with their changeset files are merged to `main`.
-    * **Important:** Before publishing, ensure your `package.json` is complete. Add or update fields like `keywords`, `author`, `repository` (e.g., `"repository": {"type": "git", "url": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"}`), `bugs` (e.g., `"bugs": {"url": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/issues"}`), and `homepage` (e.g., `"homepage": "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME#readme"`) for better discoverability and information on npm.
-    * The `release.yml` workflow (manually triggered by default in the template) will:
-        1. Run `changeset version` to consume changeset files, update `package.json` versions, and update `CHANGELOG.md`. It will push these to a `changeset-release/main` branch and open a "Version Packages" PR.
-        2. **Merge the "Version Packages" PR.**
-        3. Upon merging, the workflow runs again on `main`. This time, it will run `pnpm run publish-packages` (which should include `changeset publish`) to publish to npm and create GitHub Releases/tags.
-    * **To enable automatic release flow:** Change `on: workflow_dispatch` in `release.yml` to `on: push: branches: [main]` (or your release branch).
+Using an MCP client, you can perform operations like:
 
-## Available Scripts
+```javascript
+// First, ensure the WALLET_PRIVATE_KEY environment variable is set on the server
+
+// Add collateral to a BAMM position
+await client.runTool("ADD_COLLATERAL", {
+  bammAddress: "0xC5B225cF058915BF28D7d9DFA3043BD53C63Ea84",
+  amount: "100",
+  collateralTokenSymbol: "FRAX"
+});
+
+// Get all your positions
+await client.runTool("GET_POSITIONS", {});
+```
+
+## Development
 
 * `pnpm run build`: Compiles TypeScript to JavaScript in `dist/` and makes the output executable.
 * `pnpm run dev`: Runs the server in development mode using `tsx` (hot-reloading for TypeScript).
 * `pnpm run start`: Runs the built server (from `dist/`) using Node.
 * `pnpm run lint`: Lints the codebase using Biome.
 * `pnpm run format`: Formats the codebase using Biome.
-
-## Using the Server
-
-After building (`pnpm run build`), you can run the server:
-
-* Directly if linked or globally installed: `mcp-hello-server` (or your customized bin name).
-* Via node: `node dist/index.js`
-* Via `pnpm dlx` (once published): `pnpm dlx your-published-package-name`
