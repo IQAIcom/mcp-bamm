@@ -2,6 +2,10 @@
 
 This project implements a Model Context Protocol (MCP) server to interact with Borrow Automated Market Maker (BAMM) contracts on the Fraxtal blockchain. It allows MCP-compatible clients (like AI assistants, IDE extensions, or custom applications) to manage BAMM positions, borrow against LP tokens, and perform other operations related to the BAMM protocol.
 
+<a href="https://glama.ai/mcp/servers/@IQAIcom/mcp-bamm">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@IQAIcom/mcp-bamm/badge" alt="MCP-BAMM MCP server" />
+</a>
+
 This server is built using TypeScript and `fastmcp`.
 
 ## Features (MCP Tools)
