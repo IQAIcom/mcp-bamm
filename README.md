@@ -1,197 +1,207 @@
-# MCP-BAMM: Model Context Protocol Server for Borrow Automated Market Maker
+# BAMM MCP Server
 
-This project implements a Model Context Protocol (MCP) server to interact with Borrow Automated Market Maker (BAMM) contracts on the Fraxtal blockchain. It allows MCP-compatible clients (like AI assistants, IDE extensions, or custom applications) to manage BAMM positions, borrow against LP tokens, and perform other operations related to the BAMM protocol.
+[![npm version](https://img.shields.io/npm/v/@iqai/mcp-bamm.svg)](https://www.npmjs.com/package/@iqai/mcp-bamm)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-This server is built using TypeScript and `fastmcp`.
+## Overview
 
-## Features (MCP Tools)
+The BAMM MCP Server enables AI agents to interact with Borrow Automated Market Maker (BAMM) contracts on the Fraxtal blockchain. This server provides comprehensive access to BAMM positions, lending, borrowing, and collateral management operations.
 
-The server exposes the following tools that MCP clients can utilize:
+By implementing the Model Context Protocol (MCP), this server allows Large Language Models (LLMs) to manage BAMM positions, borrow against LP tokens, and perform other operations related to the BAMM protocol directly through their context window.
 
-- **`ADD_COLLATERAL`**: Add collateral to your BAMM position.
+## Features
 
-  - Parameters: `bammAddress` (string), `amount` (string), `collateralToken` (string, optional), `collateralTokenSymbol` (string, optional)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Either collateralToken or collateralTokenSymbol is required`
-
-- **`BORROW`**: Borrow tokens from a BAMM position.
-
-  - Parameters: `bammAddress` (string), `amount` (string), `borrowToken` (string, optional), `borrowTokenSymbol` (string, optional)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Borrow amount must be greater than 0`
-
-- **`REPAY`**: Repay borrowed tokens to a BAMM position.
-
-  - Parameters: `bammAddress` (string), `amount` (string), `borrowToken` (string, optional), `borrowTokenSymbol` (string, optional)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Repay amount must be greater than 0`
-
-- **`LEND`**: Lend Fraxswap LP tokens to a BAMM contract.
-
-  - Parameters: `bammAddress` (string), `amount` (string)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Lend amount must be greater than 0`
-
-- **`WITHDRAW`**: Withdraw LP tokens from a BAMM contract by redeeming BAMM tokens.
-
-  - Parameters: `bammAddress` (string), `amount` (string)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Withdraw amount must be greater than 0`
-
-- **`REMOVE_COLLATERAL`**: Remove collateral from your BAMM position.
-
-  - Parameters: `bammAddress` (string), `amount` (string), `collateralToken` (string, optional), `collateralTokenSymbol` (string, optional)
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `{ "txHash": "0x..." }`
-  - Example Error: `Error: Remove collateral amount must be greater than 0`
-
-- **`GET_POSITIONS`**: Get all your active BAMM positions.
-
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `📊 *Your Active BAMM Positions*\n\n**💰 BAMM Position**\n- bamm: 0x...\n- Pair: 0x...\n- FRAX: 100\n- USDC: 200\n- rented: 0`
-  - Example Error: `❌ Failed to retrieve positions: Failed to fetch pool details: Not Found`
-
-- **`POOL_STATS`**: Get statistics for all BAMM pools.
-  - Requires `WALLET_PRIVATE_KEY` in the environment.
-  - Example Response: `Pool Stats: ...`
-  - Example Error: `Error: Pool stats not available`
-
-## Prerequisites
-
-- Node.js (v18 or newer recommended)
-- pnpm
+*   **Position Management**: View and manage your active BAMM positions across all pools.
+*   **Lending Operations**: Lend Fraxswap LP tokens to BAMM contracts to earn yield.
+*   **Borrowing**: Borrow tokens against your collateral from BAMM positions.
+*   **Collateral Management**: Add or remove collateral from your BAMM positions.
+*   **Pool Analytics**: Access statistics for all BAMM pools.
 
 ## Installation
 
-There are a few ways to use `mcp-bamm`:
+### Using npx (Recommended)
 
-**1. Using `pnpm dlx` (Recommended for most MCP client setups):**
-
-You can run the server directly using `pnpm dlx` without needing a global installation. This is often the easiest way to integrate with MCP clients.
-
-**2. Global Installation from npm (via pnpm):**
-
-Install the package globally to make the `mcp-bamm` command available system-wide:
+To use this server without installing it globally:
 
 ```bash
-pnpm add -g mcp-bamm
+npx @iqai/mcp-bamm
 ```
 
-**3. Building from Source (for development or custom modifications):**
+### Build from Source
 
-1. **Clone the repository:**
+```bash
+git clone https://github.com/IQAIcom/mcp-bamm.git
+cd mcp-bamm
+pnpm install
+pnpm run build
+```
 
-   ```bash
-   git clone https://github.com/your-org/mcp-bamm.git
-   cd mcp-bamm
-   ```
+## Running with an MCP Client
 
-2. **Install dependencies:**
+Add the following configuration to your MCP client settings (e.g., `claude_desktop_config.json`).
 
-   ```bash
-   pnpm install
-   ```
+### Minimal Configuration
 
-3. **Set up your wallet private key:**
+```json
+{
+  "mcpServers": {
+    "bamm": {
+      "command": "npx",
+      "args": ["-y", "@iqai/mcp-bamm"],
+      "env": {
+        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
+      }
+    }
+  }
+}
+```
 
-   Set the `WALLET_PRIVATE_KEY` environment variable with your wallet's private key (without 0x prefix):
+### Advanced Configuration (Local Build)
 
-   ```bash
-   export WALLET_PRIVATE_KEY=your_private_key_here
-   ```
-
-   For persistent configuration, add this to your shell profile or use a `.env` file (make sure to add the `.env` file to `.gitignore`).
-
-4. **Build the project:**
-
-   ```bash
-   pnpm run build
-   ```
-
-5. **Start the server:**
-
-   ```bash
-   pnpm run start
-   ```
+```json
+{
+  "mcpServers": {
+    "bamm": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-bamm/dist/index.js"],
+      "env": {
+        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
+      }
+    }
+  }
+}
+```
 
 ## Configuration (Environment Variables)
 
-This MCP server requires certain environment variables to be set by the MCP client that runs it. These are typically configured in the client's MCP server definition (e.g., in a `mcp.json` file for Cursor, or similar for other clients).
+| Variable | Required | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `WALLET_PRIVATE_KEY` | Yes | Private key of the wallet for signing transactions | - |
 
-- **`WALLET_PRIVATE_KEY`**: (Required for all blockchain operations)
-  - The private key of the wallet to be used for interacting with BAMM contracts (signing transactions for lending, borrowing, etc.).
-  - **Security Note:** Handle this private key with extreme care. Ensure it is stored securely and only provided to trusted MCP client configurations.
+**Security Note:** Handle your private key with extreme care. Ensure it is stored securely and only provided to trusted MCP client configurations.
 
-## Running the Server with an MCP Client
+## Usage Examples
 
-MCP clients (like AI assistants, IDE extensions, etc.) will run this server as a background process. You need to configure the client to tell it how to start your server. Below is an example configuration snippet that an MCP client might use (e.g., in a `mcp_servers.json` or similar configuration file). This example shows how to run the server using the published npm package via `pnpm dlx`.
+### Position Management
+*   "What are my current BAMM positions?"
+*   "Show me the stats for all BAMM pools."
 
-```json
-{
-  "mcpServers": {
-    "bamm-mcp-server": {
-      "command": "pnpm",
-      "args": ["dlx", "mcp-bamm"],
-      "env": {
-        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
-      }
-    }
-  }
-}
-```
+### Lending & Borrowing
+*   "Lend 100 LP tokens to the BAMM at address 0x..."
+*   "Borrow 50 FRAX from my BAMM position."
+*   "Repay 25 FRAX to my BAMM position."
 
-**Alternative if Globally Installed:**
-If you have installed `mcp-bamm` globally (`pnpm add -g mcp-bamm`), you can simplify the `command` and `args`:
+### Collateral Operations
+*   "Add 100 FRAX as collateral to my BAMM position."
+*   "Remove 50 USDC collateral from my position."
+*   "Withdraw my LP tokens from the BAMM."
 
-```json
-{
-  "mcpServers": {
-    "bamm-mcp-server": {
-      "command": "mcp-bamm",
-      "args": [],
-      "env": {
-        "WALLET_PRIVATE_KEY": "your_wallet_private_key_here"
-      }
-    }
-  }
-}
-```
+## MCP Tools
 
-- **`command`**: The executable to run.
-  - For `pnpm dlx`: `"pnpm"` (with `"dlx"` as the first arg)
-  - For global install: `"mcp-bamm"`
-- **`args`**: An array of arguments to pass to the command.
-  - For `pnpm dlx`: `["dlx", "mcp-bamm"]`
-  - For global install: `[]`
-- **`env`**: An object containing environment variables to be set when the server process starts. This is where you provide `WALLET_PRIVATE_KEY`.
+<!-- AUTO-GENERATED TOOLS START -->
 
-## Example Usage
+### `ADD_COLLATERAL`
+Add collateral to your BAMM position
 
-Using an MCP client, you can perform operations like:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount of collateral to add |
+| `collateralToken` | string |  | The address of the collateral token |
+| `collateralTokenSymbol` | string |  | The symbol of the collateral token (e.g., 'IQT') |
 
-```javascript
-// First, ensure the WALLET_PRIVATE_KEY environment variable is set on the server
+### `BORROW`
+Borrow tokens from a BAMM position
 
-// Add collateral to a BAMM position
-await client.runTool("ADD_COLLATERAL", {
-  bammAddress: "0xC5B225cF058915BF28D7d9DFA3043BD53C63Ea84",
-  amount: "100",
-  collateralTokenSymbol: "FRAX",
-});
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount to borrow |
+| `borrowToken` | string |  | The address of the token to borrow |
+| `borrowTokenSymbol` | string |  | The symbol of the token to borrow (e.g., 'IQT') |
 
-// Get all your positions
-await client.runTool("GET_POSITIONS", {});
-```
+### `LEND`
+Lend Fraxswap LP tokens to a BAMM contract
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount of LP tokens to lend |
+
+### `REMOVE_COLLATERAL`
+Remove collateral from your BAMM position
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount of collateral to remove |
+| `collateralToken` | string |  | The address of the collateral token |
+| `collateralTokenSymbol` | string |  | The symbol of the collateral token (e.g., 'IQT') |
+
+### `REPAY`
+Repay borrowed tokens to a BAMM position
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount to repay |
+| `borrowToken` | string |  | The address of the token to repay |
+| `borrowTokenSymbol` | string |  | The symbol of the token to repay (e.g., 'IQT') |
+
+### `WITHDRAW`
+Withdraw LP tokens from a BAMM contract by redeeming BAMM tokens
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `bammAddress` | string | Yes | The address of the BAMM contract |
+| `amount` | string | Yes | The amount of BAMM tokens to withdraw |
+
+### `GET_POSITIONS`
+Get all your active BAMM positions
+
+_No parameters_
+
+### `POOL_STATS`
+Get statistics for all BAMM pools
+
+_No parameters_
+
+<!-- AUTO-GENERATED TOOLS END -->
 
 ## Development
 
-- `pnpm run build`: Compiles TypeScript to JavaScript in `dist/` and makes the output executable.
-- `pnpm run dev`: Runs the server in development mode using `tsx` (hot-reloading for TypeScript).
-- `pnpm run start`: Runs the built server (from `dist/`) using Node.
-- `pnpm run lint`: Lints the codebase using Biome.
-- `pnpm run format`: Formats the codebase using Biome.
+### Build Project
+```bash
+pnpm run build
+```
+
+### Development Mode (Watch)
+```bash
+pnpm run watch
+```
+
+### Linting & Formatting
+```bash
+pnpm run lint
+pnpm run format
+```
+
+### Project Structure
+*   `src/tools/`: Individual tool definitions
+*   `src/services/`: API client and business logic
+*   `src/lib/`: Shared utilities
+*   `src/index.ts`: Server entry point
+
+## Resources
+
+*   [BAMM Documentation](https://docs.frax.finance/frax-lending/bamm)
+*   [Model Context Protocol (MCP)](https://modelcontextprotocol.io)
+*   [Fraxtal Network](https://frax.finance)
+
+## Disclaimer
+
+This project interacts with blockchain smart contracts and handles cryptocurrency transactions. Users should exercise caution, verify all data independently, and understand the risks involved in DeFi operations.
+
+## License
+
+[MIT](LICENSE)
