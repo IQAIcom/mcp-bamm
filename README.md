@@ -156,16 +156,6 @@ Withdraw LP tokens from a BAMM contract by redeeming BAMM tokens
 | `bammAddress` | string | Yes | The address of the BAMM contract |
 | `amount` | string | Yes | The amount of BAMM tokens to withdraw |
 
-### `GET_POSITIONS`
-Get all your active BAMM positions
-
-_No parameters_
-
-### `POOL_STATS`
-Get statistics for all BAMM pools
-
-_No parameters_
-
 <!-- AUTO-GENERATED TOOLS END -->
 
 ## Development
