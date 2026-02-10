@@ -1,5 +1,5 @@
 import dedent from "dedent";
-import type { Tool } from "fastmcp";
+import type { FastMCPSessionAuth, Tool } from "fastmcp";
 import type { Address } from "viem";
 import { z } from "zod";
 import formatNumber from "../lib/format-number.js";
@@ -28,13 +28,13 @@ export type RemoveCollateralToolParams = z.infer<
 >;
 
 export const removeCollateralTool: Tool<
-	undefined,
+	FastMCPSessionAuth,
 	typeof removeCollateralToolParams
 > = {
 	name: "REMOVE_COLLATERAL",
 	description: "Remove collateral from your BAMM position",
 	parameters: removeCollateralToolParams,
-	execute: async (params) => {
+	execute: async (params, _context) => {
 		try {
 			if (!params.collateralToken && !params.collateralTokenSymbol) {
 				return "Error: Either collateralToken address or collateralTokenSymbol is required";

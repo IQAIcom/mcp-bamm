@@ -1,5 +1,5 @@
 import dedent from "dedent";
-import type { Tool } from "fastmcp";
+import type { FastMCPSessionAuth, Tool } from "fastmcp";
 import type { Address } from "viem";
 import { z } from "zod";
 import formatNumber from "../lib/format-number.js";
@@ -25,11 +25,11 @@ const borrowToolParams = z.object({
 
 export type BorrowToolParams = z.infer<typeof borrowToolParams>;
 
-export const borrowTool: Tool<undefined, typeof borrowToolParams> = {
+export const borrowTool: Tool<FastMCPSessionAuth, typeof borrowToolParams> = {
 	name: "BORROW",
 	description: "Borrow tokens from a BAMM position",
 	parameters: borrowToolParams,
-	execute: async (params) => {
+	execute: async (params, _context) => {
 		try {
 			if (!params.borrowToken && !params.borrowTokenSymbol) {
 				return "Error: Either borrowToken address or borrowTokenSymbol is required";

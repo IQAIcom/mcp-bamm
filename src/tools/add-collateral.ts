@@ -1,5 +1,5 @@
 import dedent from "dedent";
-import type { Tool } from "fastmcp";
+import type { FastMCPSessionAuth, Tool } from "fastmcp";
 import type { Address } from "viem";
 import { z } from "zod";
 import formatNumber from "../lib/format-number.js";
@@ -26,13 +26,13 @@ const addCollateralToolParams = z.object({
 export type AddCollateralToolParams = z.infer<typeof addCollateralToolParams>;
 
 export const addCollateralTool: Tool<
-	undefined,
+	FastMCPSessionAuth,
 	typeof addCollateralToolParams
 > = {
 	name: "ADD_COLLATERAL",
 	description: "Add collateral to your BAMM position",
 	parameters: addCollateralToolParams,
-	execute: async (params) => {
+	execute: async (params, _context) => {
 		try {
 			if (!params.collateralToken && !params.collateralTokenSymbol) {
 				return "Error: Either collateralToken address or collateralTokenSymbol is required";

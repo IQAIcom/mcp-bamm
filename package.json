@@ -33,7 +33,7 @@
 	"keywords": ["mcp", "bamm", "borrow", "automated market maker"],
 	"dependencies": {
 		"dedent": "^1.6.0",
-		"fastmcp": "^1.27.7",
+		"fastmcp": "^3.32.0",
 		"zod": "^3.25.7",
 		"viem": "^2.22.15"
 	},

@@ -1,5 +1,5 @@
 import dedent from "dedent";
-import type { Tool } from "fastmcp";
+import type { FastMCPSessionAuth, Tool } from "fastmcp";
 import type { Address } from "viem";
 import { z } from "zod";
 import formatNumber from "../lib/format-number.js";
@@ -16,11 +16,11 @@ const lendToolParams = z.object({
 
 export type LendToolParams = z.infer<typeof lendToolParams>;
 
-export const lendTool: Tool<undefined, typeof lendToolParams> = {
+export const lendTool: Tool<FastMCPSessionAuth, typeof lendToolParams> = {
 	name: "LEND",
 	description: "Lend Fraxswap LP tokens to a BAMM contract",
 	parameters: lendToolParams,
-	execute: async (params) => {
+	execute: async (params, _context) => {
 		try {
 			const privateKey = process.env.WALLET_PRIVATE_KEY;
 			if (!privateKey) {
