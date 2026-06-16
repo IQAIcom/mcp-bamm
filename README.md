@@ -30,7 +30,7 @@ npx @iqai/mcp-bamm
 ### Build from Source
 
 ```bash
-git clone https://github.com/IQAIcom/mcp-bamm.git
+git clone https://github.com/IQOfficial/mcp-bamm.git
 cd mcp-bamm
 pnpm install
 pnpm run build

@@ -20,12 +20,12 @@
 	"author": "IQAI",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/IQAIcom/mcp-bamm.git"
+		"url": "https://github.com/IQOfficial/mcp-bamm.git"
 	},
 	"license": "ISC",
-	"homepage": "https://github.com/IQAIcom/mcp-bamm",
+	"homepage": "https://github.com/IQOfficial/mcp-bamm",
 	"bugs": {
-		"url": "https://github.com/IQAIcom/mcp-bamm/issues"
+		"url": "https://github.com/IQOfficial/mcp-bamm/issues"
 	},
 	"publishConfig": {
 		"access": "public"
